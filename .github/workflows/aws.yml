@@ -8,10 +8,10 @@ jobs:
     - name: Copiar el contenido del repositorio con scp
       uses: appleboy/scp-action@master
       with:
-        HOST: ${{ secrets.HOSTPROD }}
-        USERNAME: ${{ secrets.USERNAMEPROD }}
-        PORT: ${{ secrets.PORTPROD }}
-        KEY: ${{ secrets.SSHKEYPROD }}
-        source: "ike-biossman-admin-prod/*"
-        target: "/var/www/ike-biossman-admin-prod"
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSHKEY }}
+        source: "ike-biossman-admin-dev/*"
+        target: "/var/www/ike-biossman-admin-dev"
         strip_components: 1
