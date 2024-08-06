@@ -1,0 +1,17 @@
+name: Deploy 
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Copiar el contenido del repositorio con scp
+      uses: appleboy/scp-action@master
+      with:
+        HOST: ${{ secrets.HOSTPROD }}
+        USERNAME: ${{ secrets.USERNAMEPROD }}
+        PORT: ${{ secrets.PORTPROD }}
+        KEY: ${{ secrets.SSHKEYPROD }}
+        source: "ike-biossman-admin-prod/*"
+        target: "/var/www/ike-biossman-admin-prod"
+        strip_components: 1
