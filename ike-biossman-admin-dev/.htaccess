@@ -1,0 +1,60 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_php8.c>
+php_value upload_max_filesize 8M
+php_value post_max_size 8M
+php_value max_execution_time 4200
+php_value memory_limit 256M
+php_value max_input_time 0
+</IfModule>
+
+<IfModule mod_headers.c>
+Header set Connection keep-alive
+
+    # 1 WEEKS
+    <filesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|swf)$">
+        Header set Cache-Control "max-age=604800, public"
+    </filesMatch>
+
+    # 1 DAY
+    <filesMatch "\.(css)$">
+        Header set Cache-Control "max-age=604800, public, must-revalidate"
+    </filesMatch>
+
+    # 1 DAYS
+    <filesMatch "\.(xml|txt)$">
+        Header set Cache-Control "max-age=86400, public, must-revalidate"
+    </filesMatch>
+
+    # 1 HOURS
+    <filesMatch "\.(html|htm)$">
+        Header set Cache-Control "max-age=3600, must-revalidate"
+    </filesMatch>
+
+    <FilesMatch "\.(gif|jpg|png|ico|css|js|pdf|txt)$">
+        Header append Cache-Control "public"
+    </FilesMatch>
+</IfModule>
+
+
+Lunes 11:30 -12:20 comunicacion red
