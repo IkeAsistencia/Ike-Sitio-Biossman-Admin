@@ -42,7 +42,7 @@
                       <i class="fas fa-envelope fa-lg"></i>
                     </span>
                   </div>
-                  <input type="email" class="form-control" id="lemail" name="lemail" value="jcortes@ikeasistencia.com" placeholder="Correo Electrónico" maxlength="30">
+                  <input type="email" class="form-control" id="lemail" name="lemail" placeholder="Correo Electrónico" maxlength="30">
                 </div>
                 <div class="input-group">
                   <div class="input-group-prepend">
@@ -50,7 +50,7 @@
                       <i class="fas fa-key fa-lg"></i>
                     </span>
                   </div>
-                  <input type="password" class="form-control" id="lpassword" name="lpassword" value="pruebas" placeholder="Contraseña" maxlength="15">
+                  <input type="password" class="form-control" id="lpassword" name="lpassword" placeholder="Contraseña" maxlength="15">
                 </div>
               </div>
               <div class="wow-outer text-center" style="margin-top: 8%;">
