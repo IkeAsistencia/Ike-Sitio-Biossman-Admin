@@ -450,7 +450,7 @@ class PHPExcel_Style_Alignment extends PHPExcel_Style_Supervisor implements PHPE
         if ($this->isSupervisor) {
             return $this->getSharedComponent()->getHashCode();
         }
-        return md5(
+        return hash('sha384',
             $this->horizontal .
             $this->vertical .
             $this->textRotation .

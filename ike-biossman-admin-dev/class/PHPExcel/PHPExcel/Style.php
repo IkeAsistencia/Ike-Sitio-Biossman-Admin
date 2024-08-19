@@ -609,7 +609,7 @@ class PHPExcel_Style extends PHPExcel_Style_Supervisor implements PHPExcel_IComp
             $hashConditionals .= $conditional->getHashCode();
         }
 
-        return md5(
+        return hash('sha384',
             $this->fill->getHashCode() .
             $this->font->getHashCode() .
             $this->borders->getHashCode() .

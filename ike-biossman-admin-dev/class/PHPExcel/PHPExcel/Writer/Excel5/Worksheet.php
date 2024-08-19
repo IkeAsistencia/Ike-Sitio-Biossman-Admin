@@ -1621,7 +1621,7 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
                 hexdec($password)
             );
 
-            $recordData .= PHPExcel_Shared_String::UTF8toBIFF8UnicodeLong('p' . md5($recordData));
+            $recordData .= PHPExcel_Shared_String::UTF8toBIFF8UnicodeLong('p' . hash('sha384',$recordData));
 
             $length = strlen($recordData);
 

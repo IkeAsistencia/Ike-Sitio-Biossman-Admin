@@ -311,7 +311,7 @@ class PHPExcel_Style_Fill extends PHPExcel_Style_Supervisor implements PHPExcel_
         if ($this->isSupervisor) {
             return $this->getSharedComponent()->getHashCode();
         }
-        return md5(
+        return hash('sha384',
             $this->getFillType() .
             $this->getRotation() .
             $this->getStartColor()->getHashCode() .

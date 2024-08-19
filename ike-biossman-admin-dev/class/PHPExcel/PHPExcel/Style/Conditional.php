@@ -267,7 +267,7 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
      */
     public function getHashCode()
     {
-        return md5(
+        return hash('sha384',
             $this->conditionType .
             $this->operatorType .
             implode(';', $this->condition) .

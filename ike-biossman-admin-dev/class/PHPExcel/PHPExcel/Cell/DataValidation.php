@@ -457,7 +457,7 @@ class PHPExcel_Cell_DataValidation
      */
     public function getHashCode()
     {
-        return md5(
+        return hash('sha384',
             $this->formula1 .
             $this->formula2 .
             $this->type = PHPExcel_Cell_DataValidation::TYPE_NONE .

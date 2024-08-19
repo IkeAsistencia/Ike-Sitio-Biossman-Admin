@@ -82,7 +82,7 @@ class PHPExcel_RichText_TextElement implements PHPExcel_RichText_ITextElement
      */
     public function getHashCode()
     {
-        return md5(
+        return hash('sha384',
             $this->text .
             __CLASS__
         );

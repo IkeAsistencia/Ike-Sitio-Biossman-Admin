@@ -416,7 +416,7 @@ class PHPExcel_Style_Borders extends PHPExcel_Style_Supervisor implements PHPExc
         if ($this->isSupervisor) {
             return $this->getSharedComponent()->getHashcode();
         }
-        return md5(
+        return hash('sha384',
             $this->getLeft()->getHashCode() .
             $this->getRight()->getHashCode() .
             $this->getTop()->getHashCode() .

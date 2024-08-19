@@ -528,7 +528,7 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
     private function writeVMLHeaderFooterImage(PHPExcel_Shared_XMLWriter $objWriter = null, $pReference = '', PHPExcel_Worksheet_HeaderFooterDrawing $pImage = null)
     {
         // Calculate object id
-        preg_match('{(\d+)}', md5($pReference), $m);
+        preg_match('{(\d+)}', hash('sha384',$pReference), $m);
         $id = 1500 + (substr($m[1], 0, 2) * 1);
 
         // Calculate offset
