@@ -109,7 +109,7 @@ class actualizarPuntos
     }
 }
 
-$file = $_FILES['file']['name'];
+$file = basename($_FILES['file']['name']);
 $type = $_FILES['file']['type'];
 $size = $_FILES['file']['size'];
 $url = $_FILES['file']['tmp_name'];
