@@ -25,14 +25,16 @@ class Conexion
             $this->conexion = new PDO("mysql:host=" . $this->serverDBEscritura . ";dbname=" . $this->database, $this->user, $this->passDB, array(PDO::MYSQL_ATTR_FOUND_ROWS => true));
             $this->conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo 'Falló la conexión de Escritura: ' . $e->getMessage();
+            error_log('Falló la conexión de Escritura: ' . $e->getMessage());
+            die('Falló la conexión de Escritura, revisar logs para más detalles');
         }
         if ($this->ambiente != 2) {
             try {
                 $this->conexionLectura = new PDO("mysql:host=" . $this->serverDBLectura . ";dbname=" . $this->database, $this->user, $this->passDB, array(PDO::MYSQL_ATTR_FOUND_ROWS => true));
                 $this->conexionLectura->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
-                echo 'Falló la conexión de Lectura: ' . $e->getMessage();
+                error_log('Falló la conexión de Lectura: ' . $e->getMessage());
+                die('Falló la conexión de Lectura, revisar logs para más detalles');
             }
         } else {
             $this->conexionLectura = $this->conexion;
