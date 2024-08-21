@@ -384,7 +384,7 @@ switch ($action):
         $producto         = htmlentities($_POST['producto'], ENT_QUOTES, 'UTF-8');
         $puntos           = htmlentities($_POST['puntos'], ENT_QUOTES, 'UTF-8');
         $descripcionCorta = htmlentities($_POST['descripcionCorta'], ENT_QUOTES, 'UTF-8');
-        $descripcionLarga = htmlentities($_POST['descripcionLarga'], ENT_QUOTES, 'UTF-8');
+        $descripcionLarga = $conexion->xssClean($_POST['descripcionLarga']);
         $file = isset($_FILES['file']) ? $_FILES['file'] : '';
         crearProducto($conexion, $producto, $puntos, $descripcionCorta, $descripcionLarga, $file);
         break;
@@ -393,7 +393,7 @@ switch ($action):
         $producto         = htmlentities($_POST['producto'], ENT_QUOTES, 'UTF-8');
         $puntos           = htmlentities($_POST['puntos'], ENT_QUOTES, 'UTF-8');
         $descripcionCorta = htmlentities($_POST['descripcionCorta'], ENT_QUOTES, 'UTF-8');
-        $descripcionLarga = $_POST['descripcionLarga'];
+        $descripcionLarga = $conexion->xssClean($_POST['descripcionLarga']);
         $file = isset($_FILES['file']) ? $_FILES['file'] : '';
         modificarProducto($conexion, $id_producto, $producto, $puntos, $descripcionCorta, $descripcionLarga, $file);
         break;
@@ -409,7 +409,7 @@ switch ($action):
         $curso         = htmlentities($_POST['curso'], ENT_QUOTES, 'UTF-8');
         $puntos           = htmlentities($_POST['puntos'], ENT_QUOTES, 'UTF-8');
         $descripcionCorta = htmlentities($_POST['descripcionCorta'], ENT_QUOTES, 'UTF-8');
-        $descripcionLarga = htmlentities($_POST['descripcionLarga'], ENT_QUOTES, 'UTF-8');
+        $descripcionLarga = $conexion->xssClean($_POST['descripcionLarga']);
         $file = isset($_FILES['file']) ? $_FILES['file'] : '';
         crearCurso($conexion, $curso, $puntos, $descripcionCorta, $descripcionLarga, $file);
         break;
@@ -418,7 +418,7 @@ switch ($action):
         $curso         = htmlentities($_POST['curso'], ENT_QUOTES, 'UTF-8');
         $puntos           = htmlentities($_POST['puntos'], ENT_QUOTES, 'UTF-8');
         $descripcionCorta = htmlentities($_POST['descripcionCorta'], ENT_QUOTES, 'UTF-8');
-        $descripcionLarga = $_POST['descripcionLarga'];
+        $descripcionLarga = $conexion->xssClean($_POST['descripcionLarga']);
         $file = isset($_FILES['file']) ? $_FILES['file'] : '';
         modificarCurso($conexion, $id_curso, $curso, $puntos, $descripcionCorta, $descripcionLarga, $file);
         break;
