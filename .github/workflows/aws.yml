@@ -13,5 +13,5 @@ jobs:
         PORT: ${{ secrets.PORTPROD }}
         KEY: ${{ secrets.SSHKEYPROD }}
         source: "ike-biossman-admin-prod/*"
-        target: "/var/www/ike-admin-biossman-prod"
+        target: "/var/www/ike-admin-biurewards-prod/"
         strip_components: 1
