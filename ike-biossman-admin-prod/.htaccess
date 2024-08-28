@@ -1,3 +1,14 @@
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+    # Header set Content-Security-Policy ...
+    Header set Referrer-Policy "same-origin"
+    Header set Feature-Policy "geolocation 'self'; vibrate 'none'"
+</IfModule>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -14,27 +25,10 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    #RewriteRule ^(registro-cashi)$ $1.php [NC,L]
-    RewriteRule ^registro-cashi https://sitio-membresiasalud.dev-pruebas.com/registro-cashi.php
-    RewriteRule ^registro-cashi.html https://sitio-membresiasalud.dev-pruebas.com/registro-cashi.php
-    RewriteRule ^product-register.php https://sitio-membresiasalud.dev-pruebas.com/registro-producto.php
-    RewriteRule ^BA https://sitio-membresiasalud.dev-pruebas.com
-
-</IfModule>
-
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{HTTP_HOST} ^membresiasalud.com$ [OR]
-    RewriteCond %{HTTP_HOST} ^www.membresiasalud.com$
-    RewriteRule (.*)$ https://www.programasalud.com.mx/$1 [R=301,L]
-</IfModule>
-
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{HTTP_HOST} ^membresiasalud.com/SM$ [OR]
-    RewriteCond %{HTTP_HOST} ^www.membresiasalud.com/SM$
-    RewriteRule (.*)$ https://www.programasalud.com.mx/SM/$1 [R=301,L]
+    RewriteRule ^ index.php [L]
 </IfModule>
 
 <IfModule mod_php8.c>
@@ -46,40 +40,34 @@
 </IfModule>
 
 <IfModule mod_headers.c>
-    Header set Connection keep-alive
-    Header set Cache-Control "no-cache, no-store, must-revalidate"
-    Header set Pragma "no-cache"
-    Header set Expires 0
+Header set Connection keep-alive
+
+    # 1 WEEKS
+    <filesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|swf)$">
+        Header set Cache-Control "max-age=0, public"
+    </filesMatch>
+
+    # 1 DAY
+    <filesMatch "\.(css)$">
+        Header set Cache-Control "max-age=0, public, must-revalidate"
+    </filesMatch>
+
+    # 1 DAYS
+    <filesMatch "\.(xml|txt)$">
+        Header set Cache-Control "max-age=0, public, must-revalidate"
+    </filesMatch>
+
+    # 1 HOURS
+    <filesMatch "\.(html|htm)$">
+        Header set Cache-Control "max-age=0, must-revalidate"
+    </filesMatch>
+
+    <FilesMatch "\.(gif|jpg|png|ico|css|js|pdf|txt)$">
+        Header append Cache-Control "public"
+    </FilesMatch>
 
     <FilesMatch "\.(htaccess|ini|log)$">
         Order Allow,Deny
         Deny from all
     </FilesMatch>
-</IfModule>
-
-<FilesMatch "\.(css|flv|php|gif|htm|html|ico|jpe|jpeg|jpg|js|mp3|mp4|png|pdf|swf|txt)$">
-    <IfModule mod_expires.c>
-        ExpiresActive Off
-    </IfModule>
-    <IfModule mod_headers.c>
-        FileETag None
-        Header unset ETag
-        Header unset Pragma
-        Header unset Cache-Control
-        Header unset Last-Modified
-        Header set Pragma "no-cache"
-        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
-        Header set Expires "jue, 1 Jan 1970 00:00:00 GMT"
-    </IfModule>
-</FilesMatch>
-
-# Security Headers
-<IfModule mod_headers.c>
-    Header set X-XSS-Protection "1; mode=block"
-    Header set X-Frame-Options "SAMEORIGIN"
-    Header set X-Content-Type-Options "nosniff"
-    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
-    # Header set Content-Security-Policy ...
-    Header set Referrer-Policy "same-origin"
-    Header set Feature-Policy "geolocation 'self'; vibrate 'none'"
 </IfModule>
