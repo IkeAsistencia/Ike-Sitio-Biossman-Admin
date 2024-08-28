@@ -1,3 +1,14 @@
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+    # Header set Content-Security-Policy ...
+    Header set Referrer-Policy "same-origin"
+    Header set Feature-Policy "geolocation 'self'; vibrate 'none'"
+</IfModule>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -21,11 +32,11 @@
 </IfModule>
 
 <IfModule mod_php8.c>
-php_value upload_max_filesize 8M
-php_value post_max_size 8M
-php_value max_execution_time 4200
-php_value memory_limit 256M
-php_value max_input_time 0
+    php_value upload_max_filesize 8M
+    php_value post_max_size 8M
+    php_value max_execution_time 4200
+    php_value memory_limit 256M
+    php_value max_input_time 0
 </IfModule>
 
 <IfModule mod_headers.c>
@@ -33,28 +44,30 @@ Header set Connection keep-alive
 
     # 1 WEEKS
     <filesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|swf)$">
-        Header set Cache-Control "max-age=604800, public"
+        Header set Cache-Control "max-age=0, public"
     </filesMatch>
 
     # 1 DAY
     <filesMatch "\.(css)$">
-        Header set Cache-Control "max-age=604800, public, must-revalidate"
+        Header set Cache-Control "max-age=0, public, must-revalidate"
     </filesMatch>
 
     # 1 DAYS
     <filesMatch "\.(xml|txt)$">
-        Header set Cache-Control "max-age=86400, public, must-revalidate"
+        Header set Cache-Control "max-age=0, public, must-revalidate"
     </filesMatch>
 
     # 1 HOURS
     <filesMatch "\.(html|htm)$">
-        Header set Cache-Control "max-age=3600, must-revalidate"
+        Header set Cache-Control "max-age=0, must-revalidate"
     </filesMatch>
 
     <FilesMatch "\.(gif|jpg|png|ico|css|js|pdf|txt)$">
         Header append Cache-Control "public"
     </FilesMatch>
+
+    <FilesMatch "\.(htaccess|ini|log)$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
 </IfModule>
-
-
-Lunes 11:30 -12:20 comunicacion red
