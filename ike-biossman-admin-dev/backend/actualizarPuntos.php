@@ -1,7 +1,9 @@
 <?php
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 header('Content-type:application/json;charset=utf-8');
 require_once "conexion/conexion.php";
 $action = $_POST['action'];
+
 
 require_once('../class/PHPExcel/PHPExcel.php');
 
@@ -12,44 +14,6 @@ class actualizarPuntos
     function __construct()
     {
         $this->conexion = new conexion();
-    }
-
-    public function createDirectory($anio, $mes, $meses)
-    {
-        $dir = "../tmp/archivosPuntos/" . $anio;
-
-        if (!is_dir($dir)) {
-            mkdir($dir);
-            chmod($dir, 0777);
-        }
-
-        foreach ($meses as $value => $name) {
-            if ($mes == $value) {
-                $mes = $name;
-                $dir2 = "../tmp/archivosPuntos/" . $anio . "/" . $mes;
-                if (!is_dir($dir2)) {
-                    mkdir($dir2);
-                    chmod($dir2, 0777);
-                }
-            }
-        }
-        return $dir2;
-    }
-
-    public function saveFileExcel($url, $dir2, $file)
-    {
-        $url_remote = $dir2 . "/" . $file;
-        move_uploaded_file($url, $url_remote);
-
-        return $url_remote;
-    }
-
-    public function renameFileExcel($dir2, $url_remote)
-    {
-        $new_name = $dir2 . "/Actualizacion_Puntos_Biu_" . date('Ymd') . ".xlsx";
-        rename($url_remote, $new_name);
-
-        return $new_name;
     }
 
     public function validateFileExcel($highestColumn, $sheet)
@@ -71,14 +35,19 @@ class actualizarPuntos
         return $error;
     }
 
-    public function readFileExcel($new_url_remote)
+    public function readFileExcel()
     {
-        $fileType = PHPExcel_IOFactory::identify($new_url_remote);
+
+        $tempFile = sys_get_temp_dir() . '/puntos-clientes.xlsx';
+        file_put_contents($tempFile, file_get_contents($_FILES["file"]["tmp_name"]));
+
+        $fileType = PHPExcel_IOFactory::identify($tempFile);
         $objReader = PHPExcel_IOFactory::createReader($fileType);
-        $objPHPExcel = $objReader->load($new_url_remote);
+        $objPHPExcel = $objReader->load($tempFile);
         $sheet = $objPHPExcel->getSheet(0);
         $highestRow = $sheet->getHighestRow();
         $highestColumn = $sheet->getHighestColumn();
+        unlink($tempFile);
 
         return array('Column' => $highestColumn, 'Row' => $highestRow, 'Sheet' => $sheet);
     }
@@ -109,31 +78,12 @@ class actualizarPuntos
     }
 }
 
-$file = basename($_FILES['file']['name']);
-$type = $_FILES['file']['type'];
-$size = $_FILES['file']['size'];
-$url = $_FILES['file']['tmp_name'];
-$anio = date('Y');
-$mes = date('m');
-$meses = array(
-    "01" => "Enero", "02" => "Febrero", "03" => "Marzo", "04" => "Abril", "05" => "Mayo", "06" => "Junio",
-    "07" => "Julio", "08" => "Agosto", "09" => "Septiembre", "10" => "Octubre", "11" => "Noviembre", "12" => "Diciembre"
-);
-
 $puntos = new actualizarPuntos();
-$dir2 = $puntos->createDirectory($anio, $mes, $meses);
-if ($dir2 != "")
-    $url_remote = $puntos->saveFileExcel($url, $dir2, $file);
 
-if ($url_remote != "")
-    $new_url_remote = $puntos->renameFileExcel($dir2, $url_remote);
-
-if ($new_url_remote != "") {
-    $dataExcel = $puntos->readFileExcel($new_url_remote);
-    $highestColumn = $dataExcel['Column'];
-    $highestRow = $dataExcel['Row'];
-    $sheet = $dataExcel['Sheet'];
-}
+$dataExcel = $puntos->readFileExcel();
+$highestColumn = $dataExcel['Column'];
+$highestRow = $dataExcel['Row'];
+$sheet = $dataExcel['Sheet'];
 
 if ($highestColumn != "")
     $error = $puntos->validateFileExcel($highestColumn, $sheet);
@@ -141,7 +91,6 @@ if ($highestColumn != "")
 if ($error == 0) {
     $result = $puntos->updatePuntosBiu($highestRow, $sheet);
     echo json_encode($result);
-} else {    
-    unlink($new_url_remote);
+} else {
     $result = array("codigo" => 418, "mensaje" => "El archivo no cumple con la estructura correcta!");
 }
